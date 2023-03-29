@@ -31,8 +31,6 @@ jobs:
           load: true
           tags: gchr.io/${GITHUB_REPOSITORY_OWNER}/moo
           context: .
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
 
       - name: Push moo docker image
         uses: docker/build-push-action@v2
