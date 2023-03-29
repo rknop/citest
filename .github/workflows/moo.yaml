@@ -27,14 +27,14 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Hello world
-        run: echo first ${{ env.GITHUB_REPOSITORY_OWNER }} second ${GITHUB_REPOSITORY_OWNER}
+        run: echo first ${{ github.repository_owner }} second ${GITHUB_REPOSITORY_OWNER}
 
       - name: Pull & build moo docker image
         uses: docker/build-push-action@v2
         with:
           push: false
           load: true
-          tags: ghcr.io/${{ env.GITHUB_REPOSITORY_OWNER }}/moo:latest
+          tags: ghcr.io/${{ github.repository_owner }}/moo:latest
           context: .
 
       - name: Push moo docker image
@@ -42,7 +42,7 @@ jobs:
         with:
           push: true
           load: false
-          tags: ghcr.io/${{ env.GITHUB_REPOSITORY_OWNER }}/moo:latest
+          tags: ghcr.io/${{ github.repository_owner }}/moo:latest
           context: .
 
       - name: docker compose build
