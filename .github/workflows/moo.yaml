@@ -26,6 +26,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Hello world
+        run: echo first: ${{ env.GITHUB_REPOSITORY_OWNER }} second: ${GITHUB_REPOSITORY_OWNER}
+
       - name: Pull & build moo docker image
         uses: docker/build-push-action@v2
         with:
