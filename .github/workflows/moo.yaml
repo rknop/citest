@@ -40,8 +40,8 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
 
-       - name: docker compose build
-         run: docker compose build
+      - name: docker compose build
+        run: docker compose build
 
 #      - name: Pull / build / push docker images
 #        run: docker compose pull ; docker compose build && docker compose push
