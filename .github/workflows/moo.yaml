@@ -6,9 +6,6 @@ on:
       - main
     workflow_dispatch:
 
-env:
-  repoowner: ${GITHUB_REPOSITORY_OWNER}
-
 jobs:
   tests:
     name: moo
@@ -32,7 +29,7 @@ jobs:
         with:
           push: false
           load: true
-          tags: ${{ env.repoowner }}/moo:latest
+          tags: ghcr.io/${{ vars.GITHUB_REPOSITORY_OWNER }}/moo:latest
           context: .
 
       - name: Push moo docker image
@@ -40,7 +37,7 @@ jobs:
         with:
           push: true
           load: false
-          tags: ${{ env.repoowner }}/moo:latest
+          tags: ghcr.io/${{ vars.GITHUB_REPOSITORY_OWNER }}/moo:latest
           context: .
 
       - name: docker compose build
