@@ -24,8 +24,27 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Pull / build / push docker images
-        run: docker compose pull ; docker compose build && docker compose push
+      # I'd like to be able to just do something like
+      #   "docker compose pull", but it seems that
+      #   github actions doesn't support that.
+      #   So, the images here must stay in sync
+      #   with what's in docker-compose.yaml
+
+      - name: Pull moo docker image
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          load: true
+          tags: gchr.io/${GITHUB_REPOSITORY_OWNER}/moo
+          context: .
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+
+       - name: docker compose build
+         run: docker compose build
+
+#      - name: Pull / build / push docker images
+#        run: docker compose pull ; docker compose build && docker compose push
 
 #      - name: Pull docker images from ghcr.io repository
 #        run: docker compose pull || echo "Failed to pull images, will build."
