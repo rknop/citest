@@ -27,6 +27,9 @@ jobs:
       - name: Pull docker images from ghcr.io repository
         run: docker compose pull || echo "Failed to pull images, will build."
 
+      - name: list images
+        run: docker image list
+
       - name: Build images
         run: docker compose build
 
