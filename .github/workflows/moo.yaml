@@ -16,27 +16,32 @@ jobs:
       REGISTRY: ghcr.io
 
     steps:
-      - name: Checkout code
+      - name: checkout code
         uses: actions/checkout@v3
 
-      - name: Log into github container registry
+      - name: log into github container registry
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Hello world
+      - name: hello world
         run: echo first ${{ github.repository_owner }} second ${GITHUB_REPOSITORY_OWNER}
 
-      - name: Build and push moo docker image
+      - name: pull/build moo docker image
         uses: docker/build-push-action@v2
         with:
           pull: true
-          push: true
           load: true
           tags: ghcr.io/${{ github.repository_owner }}/moo:latest
           context: .
 
-      - name: Run test
+      - name: push moo docker image
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/moo:latest
+
+      - name: run test
         run: docker compose run moo
