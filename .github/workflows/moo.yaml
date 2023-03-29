@@ -1,0 +1,37 @@
+name: Moo
+
+on:
+  push:
+    branches:
+      - main
+    workflow_dispatch:
+
+jobs:
+  tests:
+    name: moo
+    runs-on: ubuntu-latest
+    env:
+      REGISTRY: gchr.io
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Log into github container registry
+        uses: docker/login-action@v2
+        with:
+          registry: gchr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull docker images from gchr.io repository
+        run: docker compose pull || echo "Failed to pull images, will build."
+
+      - name: Build images
+        run: docker compose build
+
+      - name: Push docker images to gchr.io repository
+        run: docker compose push
+
+      - name: Run tests
+        run: docker compose run moo
