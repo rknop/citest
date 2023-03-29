@@ -11,7 +11,7 @@ jobs:
     name: moo
     runs-on: ubuntu-latest
     env:
-      REGISTRY: gchr.io
+      REGISTRY: ghcr.io
 
     steps:
       - name: Checkout code
@@ -20,18 +20,22 @@ jobs:
       - name: Log into github container registry
         uses: docker/login-action@v2
         with:
-          registry: gchr.io
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Pull docker images from gchr.io repository
+      - name: Pull docker images from ghcr.io repository
         run: docker compose pull || echo "Failed to pull images, will build."
 
       - name: Build images
         run: docker compose build
 
-      - name: Push docker images to gchr.io repository
+      - name: Push docker images to ghcr.io repository
         run: docker compose push
 
       - name: Run tests
         run: docker compose run moo
+
+
+
+

@@ -1,6 +1,6 @@
 version: "3.3"
 services:
   moo:
-    image: gchr.io/${GITHUB_REPOSITORY_OWNER}/moo
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/moo
     build: .
     entrypoint: [ "/usr/games/cowsay", "moo" ]
