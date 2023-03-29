@@ -29,24 +29,14 @@ jobs:
       - name: Hello world
         run: echo first ${{ github.repository_owner }} second ${GITHUB_REPOSITORY_OWNER}
 
-      - name: Pull & build moo docker image
+      - name: Build and push moo docker image
         uses: docker/build-push-action@v2
         with:
-          push: false
+          pull: true
+          push: true
           load: true
           tags: ghcr.io/${{ github.repository_owner }}/moo:latest
           context: .
-
-      - name: Push moo docker image
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          load: false
-          tags: ghcr.io/${{ github.repository_owner }}/moo:latest
-          context: .
-
-      - name: docker compose build
-        run: docker compose build
 
       - name: Run test
         run: docker compose run moo
