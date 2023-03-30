@@ -53,7 +53,7 @@ jobs:
 
       - name: run test
         run: |
-          docker compose pull -q || echo "Didn't pull everything"
+          docker compose pull || echo "Didn't pull everything"
           docker compose build
-          docker compose push -q
+          docker compose push
           docker compose run moo
