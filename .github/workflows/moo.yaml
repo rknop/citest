@@ -22,6 +22,13 @@ jobs:
       - name: setup docker buildx
         uses: docker/setup-buildx-action@v1
 
+      - name: cache docker layers
+        uses: actions/cache@v2
+          with: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
       - name: log into github container registry
         uses: docker/login-action@v2
         with:
@@ -29,21 +36,23 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: hello world
-        run: echo first ${{ github.repository_owner }} second ${GITHUB_REPOSITORY_OWNER}
-
-      - name: pull/build moo docker image
+      - name: build and push moo docker image
         uses: docker/build-push-action@v2
         with:
-          pull: true
-          load: true
-          tags: ghcr.io/${{ github.repository_owner }}/moo:latest
-
-      - name: push moo docker image
-        uses: docker/build-push-action@v2
-        with:
+          context: .
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/moo:latest
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new
+
+      # Temp fix I found on discussions somewhere that avoids
+      # buildx-cache growing out of hand
+      # github.com/docker/build-push-action/issues/252
+      # github.com/moby/buildkit/issues/1896
+      - name: move buildx cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: run test
         run: docker compose run moo
