@@ -9,4 +9,4 @@ services:
       - moo-webserver
     image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/moo
     build: moo
-    entrypoint: [ "/bin/bash", "testing.sh" ]
+    entrypoint: [ "/bin/bash", "/tmp/moo/testing.sh" ]
