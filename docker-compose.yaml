@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   moo-webserver:
-    image: gchr.io/${GITHUB_REPOSITORY_OWNER}/moo-webserver
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/moo-webserver
     build: webserver
 
   moo:
