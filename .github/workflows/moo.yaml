@@ -10,8 +10,6 @@ jobs:
   tests:
     name: moo
     runs-on: ubuntu-latest
-    permissions:
-      packages: write
     env:
       REGISTRY: ghcr.io
 
