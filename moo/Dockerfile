@@ -8,4 +8,9 @@ RUN DEBIAN_FRONTEND="nonintearctive" TZ="US/Pacific" \
     apt-get update && \
     apt-get -y upgrade && \
     DEBIAN_FRONTEND="nonintearctive" TZ="US/Pacific" apt-get -y install -y \
-        cowsay
+        cowsay curl
+
+RUN mkdir /tmp/moo
+WORKDIR /tmp/moo
+
+COPY testing.sh /tmp/moo/testing.sh
