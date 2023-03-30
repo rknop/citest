@@ -33,9 +33,9 @@ jobs:
           context: ./webserver
           pull: true
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/moo:latest
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository.owner }}/moo-webserver:latest
-          cache-to: type=registry,ref=ghcr.io/${{ github.repository.owner }}/moo-webserver:latest
+          tags: ghcr.io/rknop/moo:latest
+          cache-from: type=registry,ref=ghcr.io/rknop/moo-webserver:latest
+          cache-to: type=registry,ref=ghcr.io/rknop/moo-webserver:latest
 
       - name: build and push moo-webserver docker image
         uses: docker/build-push-action@v4
@@ -43,9 +43,9 @@ jobs:
           context: ./moo
           pull: true
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/moo:latest
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository.owner }}/moo:latest
-          cache-to: type=registry,ref=ghcr.io/${{ github.repository.owner }}/moo:latest
+          tags: ghcr.io/rknop/moo:latest
+          cache-from: type=registry,ref=ghcr.io/rknop/moo:latest
+          cache-to: type=registry,ref=ghcr.io/rknop/moo:latest
 
       # # Temp fix I found on discussions somewhere that avoids
       # # buildx-cache growing out of hand
