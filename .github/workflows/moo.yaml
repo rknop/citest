@@ -31,9 +31,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          key: ${{ runner.os }}-buildx-citest-moo
           restore-keys: |
-            ${{ runner.os }}-buildx-
+            ${{ runner.os }}-buildx-citest-moo
             
       # - name: build webserver
       #   uses: docker/build-push-action@v2
@@ -57,6 +57,6 @@ jobs:
       
       - name: run test
         run: |
-          docker buildx bake --set *.cache-from=type=local,src=/tmp/.buildx-cache --set *.cache-to=type=local,dest=/tmp/.buildx-cache
+          docker buildx bake --set *.cache-from=type=local,src=/tmp/.buildx-cache --set *.cache-to=type=local,dest=/tmp/.buildx-cache --load
           docker compose run moo
           
