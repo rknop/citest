@@ -4,10 +4,10 @@ services:
     image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/moo-webserver
     build:
       context: webserver
-      cache_from:
-        - ghcr.io/${GITHUB_REPOSITORY_OWNER}/moo-webserver
-      cache_to:
-        - ghcr.io/${GITHUB_REPOSITORY_OWNER}/moo-webserver
+      # cache_from:
+      #   - ghcr.io/${GITHUB_REPOSITORY_OWNER}/moo-webserver
+      # cache_to:
+      #   - ghcr.io/${GITHUB_REPOSITORY_OWNER}/moo-webserver
 
   moo:
     depends_on:
@@ -15,8 +15,8 @@ services:
     image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/moo
     build:
       context: moo
-      cache_from:
-        - ghcr.io/${GITHUB_REPOSITORY_OWNER}/moo
-      cache_to:
-        - ghcr.io/${GITHUB_REPOSITORY_OWNER}/moo
+      # cache_from:
+      #   - ghcr.io/${GITHUB_REPOSITORY_OWNER}/moo
+      # cache_to:
+      #   - ghcr.io/${GITHUB_REPOSITORY_OWNER}/moo
     entrypoint: [ "/bin/bash", "/tmp/moo/testing.sh" ]
