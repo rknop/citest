@@ -57,6 +57,6 @@ jobs:
       
       - name: run test
         run: |
-          docker buildx bake --load --set=*.cache-from=type=registry,ref=ghcr.io/${{ github.actor }}/*:latest --set=*.cache-to=type=registry,ref=ghcr.io/${{ github.actor }}/*:latest
+          docker buildx bake --load --set=*.cache-from=type=registry,ref=ghcr.io/${{ github.actor }}/moo-bake-cache --set=*.cache-to=type=registry,ref=ghcr.io/${{ github.actor }}/moo-bake-cache
           docker compose run moo
           
