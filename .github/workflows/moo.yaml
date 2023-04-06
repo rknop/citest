@@ -58,8 +58,9 @@ jobs:
       - name: bake
         uses: docker/bake-action@v2
         with:
+          load: true
           set: |
-            *.cache-to=type=gha
+            *.cache-to=type=gha,mode=max
             *.cache-from=type=gha
       
       - name: run test
