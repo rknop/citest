@@ -57,7 +57,7 @@ jobs:
       
       - name: run test
         run: |
-          docker buildx bake --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
+          docker buildx bake --set cache-from=type=local,src=/tmp/.buildx-cache --set cache-to=type=local,dest=/tmp/.buildx-cache
           docker compose run moo
 
       - name: move cache
