@@ -24,12 +24,36 @@ jobs:
       #     username: ${{ github.actor }}
       #     password: ${{ secrets.GITHUB_TOKEN }}
 
-      # I haven't yet figured out a way to get github actions to
-      # pull from and push to a registry.
-      # So, for now, we have to rebuild the docker image every time
-      # we run a test, which is profligate and slow, but it's what
-      # we're stuck with for now.  At least running the tests on
-      # your local checkout can be efficient.
+      - name: setup docker buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: cache docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+            
+      - name: build webserver
+        uses: docker/build-push-action@v3
+        with:
+          push: false
+          load: true
+          tags: ghcr.io/${{ github.actor }}/moo-webserver:latest
+          context: webserver
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,src=/tmp/.buildx-cache
+
+      - name: build moo
+        uses: docker/build-push-action@v3
+        with:
+          push: false
+          load: true
+          tags: ghcr.io/${{ github.actor }}/moo:lastest
+          context: moo
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,src=/tmp/.buildx-cache
       
       - name: run test
         run: |
