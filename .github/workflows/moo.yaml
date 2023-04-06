@@ -36,26 +36,32 @@ jobs:
             ${{ runner.os }}-buildx-
             
       - name: build webserver
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v2
         with:
           push: false
           load: true
           tags: ghcr.io/${{ github.actor }}/moo-webserver:latest
           context: webserver
           cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,src=/tmp/.buildx-cache-new
 
       - name: build moo
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v2
         with:
           push: false
           load: true
           tags: ghcr.io/${{ github.actor }}/moo:lastest
           context: moo
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,src=/tmp/.buildx-cache
+          cache-from: type=local,src=/tmp/.buildx-cache-new
+          cache-to: type=local,src=/tmp/.buildx-cache-new2
       
       - name: run test
         run: |
           docker compose build
           docker compose run moo
+
+      - name: move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new2 /tmp/.buildx-cache
+          
