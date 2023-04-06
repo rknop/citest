@@ -35,29 +35,29 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
             
-      - name: build webserver
-        uses: docker/build-push-action@v2
-        with:
-          push: false
-          load: true
-          tags: ghcr.io/${{ github.actor }}/moo-webserver:latest
-          context: webserver
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new
+      # - name: build webserver
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     push: false
+      #     load: true
+      #     tags: ghcr.io/${{ github.actor }}/moo-webserver:latest
+      #     context: webserver
+      #     cache-from: type=local,src=/tmp/.buildx-cache
+      #     cache-to: type=local,dest=/tmp/.buildx-cache-new
 
-      - name: build moo
-        uses: docker/build-push-action@v2
-        with:
-          push: false
-          load: true
-          tags: ghcr.io/${{ github.actor }}/moo:lastest
-          context: moo
-          cache-from: type=local,src=/tmp/.buildx-cache-new
-          cache-to: type=local,dest=/tmp/.buildx-cache-new2
+      # - name: build moo
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     push: false
+      #     load: true
+      #     tags: ghcr.io/${{ github.actor }}/moo:lastest
+      #     context: moo
+      #     cache-from: type=local,src=/tmp/.buildx-cache-new
+      #     cache-to: type=local,dest=/tmp/.buildx-cache-new2
       
       - name: run test
         run: |
-          docker compose build
+          docker buildx bake --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache
           docker compose run moo
 
       - name: move cache
