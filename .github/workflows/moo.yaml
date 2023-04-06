@@ -65,7 +65,7 @@ jobs:
 
       - name: run bake
         run: |
-          docker bake --load --set moo.cache-to=type=gha,mode=max,scope=moo --set moo-webserver.cache-to=type=gha,scope=moo-webserver
+          docker buildx bake --load --set moo.cache-to=type=gha,mode=max,scope=moo --set moo-webserver.cache-to=type=gha,scope=moo-webserver
       
       - name: run test
         run: |
