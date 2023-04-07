@@ -6,9 +6,9 @@ services:
       context: webserver
       x-bake:
         cache-from:
-          - type=gha,scope=moo-webserver
+          - type=gha
         cache-to:
-          - type=gha,mode=max,scope=moo-webserver
+          - type=gha,mode=max
 
   moo:
     depends_on:
@@ -18,7 +18,7 @@ services:
       context: moo
       x-bake:
         cache-from:
-          - type=gha,scope=moo
+          - type=gha
         cache-to:
-          - type=gha,mode=max,scope=moo
+          - type=gha,mode=max
     entrypoint: [ "/bin/bash", "/tmp/moo/testing.sh" ]
