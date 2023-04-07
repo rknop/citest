@@ -62,7 +62,7 @@ jobs:
         with:
           load: true
           set: |
-            *.cache-from=type=local,dest=/tmp/.buildx-cache
+            *.cache-from=type=local,src=/tmp/.buildx-cache
             *.cache-to=type=local,dest=/tmp/.buildx-cache-new
             
       #     set: |
