@@ -55,17 +55,17 @@ jobs:
       #     cache-from: type=local,src=/tmp/.buildx-cache-new
       #     cache-to: type=local,dest=/tmp/.buildx-cache-new2
 
-      # - name: bake
-      #   uses: docker/bake-action@v2
-      #   with:
-      #     load: true
-      #     set: |
-      #       moo.cache-to=type=gha,mode=max,scope=moo
-      #       moo-webserver.cache-from=type=gha,scope=moo-webserver
+      - name: bake
+        uses: docker/bake-action@v2
+        with:
+          load: true
+          set: |
+            *.cache-to=type=gha,mode=max
+            *.cache-from=type=gha
 
-      - name: run bake
-        run: |
-          docker buildx bake --load
+      # - name: run bake
+      #   run: |
+      #     docker buildx bake --load
       
       - name: run test
         run: |

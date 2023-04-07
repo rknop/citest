@@ -4,11 +4,11 @@ services:
     image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/moo-webserver
     build:
       context: webserver
-      x-bake:
-        cache-from:
-          - type=gha
-        cache-to:
-          - type=gha,mode=max
+      # x-bake:
+      #   cache-from:
+      #     - type=gha
+      #   cache-to:
+      #     - type=gha,mode=max
 
   moo:
     depends_on:
@@ -16,9 +16,9 @@ services:
     image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/moo
     build:
       context: moo
-      x-bake:
-        cache-from:
-          - type=gha
-        cache-to:
-          - type=gha,mode=max
+      # x-bake:
+      #   cache-from:
+      #     - type=gha
+      #   cache-to:
+      #     - type=gha,mode=max
     entrypoint: [ "/bin/bash", "/tmp/moo/testing.sh" ]
