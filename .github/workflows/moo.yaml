@@ -58,17 +58,12 @@ jobs:
       - name: bake
         uses: docker/bake-action@v2.3.0
         with:
-          pull: true
-          push: true
-      #    set: |
-      #      *.cache-to=type=gha,mode=max
-      #      *.cache-from=type=gha
-
-      - name: load bake
-        uses: docker/bake-action@v2.3.0
-        with:
           load: true
-      
+          push: true
+          set: |
+            *.cache-to=type=gha,mode=max
+            *.cache-from=type=gha
+
       # - name: run bake
       #   run: |
       #     docker buildx bake --load
