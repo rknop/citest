@@ -26,15 +26,17 @@ jobs:
 
       - name: setup docker buildx
         uses: docker/setup-buildx-action@v2
+        with:
+          driver: docker-container
 
-      # - name: cache docker layers
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: /tmp/.buildx-cache
-      #     key: ${{ runner.os }}-buildx-citest-${{ github.sha }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-buildx-citest-
-           
+      - name: cache docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-citest-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-citest-
+         
       # - name: build webserver
       #   uses: docker/build-push-action@v2
       #   with:
@@ -58,20 +60,15 @@ jobs:
       - name: bake
         uses: docker/bake-action@v2.3.0
         with:
-          pull: true
-          push: true
-          set: |
-            *.cache-to=type=gha,mode=max
-            *.cache-from=type=gha
-
-      - name: load bake
-        uses: docker/bake-action@v2.3.0
-        with:
           load: true
           set: |
-            *.cache-to=type=gha,mode=max
-            *.cache-from=type=gha
+            *.cache-from=type=local,dest=/tmp/.buildx-cache
+            *.cache-to=type=local,dest=/tmp/.buildx-cache-new
             
+      #     set: |
+      #       *.cache-to=type=gha,mode=max
+      #       *.cache-from=type=gha
+
       # - name: run bake
       #   run: |
       #     docker buildx bake --load
@@ -80,9 +77,9 @@ jobs:
         run: |
           docker compose run moo
 
-      # # Do this to avoid the cache continuously growing
-      # - name: move cache
-      #   run: |
-      #     rm -rf /tmp/.buildx-cache
-      #     mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+      # Do this to avoid the cache continuously growing
+      - name: move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
          
