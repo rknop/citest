@@ -37,42 +37,18 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-citest-
          
-      # - name: build webserver
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     push: false
-      #     load: true
-      #     tags: ghcr.io/${{ github.actor }}/moo-webserver:latest
-      #     context: webserver
-      #     cache-from: type=local,src=/tmp/.buildx-cache
-      #     cache-to: type=local,dest=/tmp/.buildx-cache-new
-
-      # - name: build moo
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     push: false
-      #     load: true
-      #     tags: ghcr.io/${{ github.actor }}/moo:lastest
-      #     context: moo
-      #     cache-from: type=local,src=/tmp/.buildx-cache-new
-      #     cache-to: type=local,dest=/tmp/.buildx-cache-new2
-
       - name: bake
         uses: docker/bake-action@v2.3.0
         with:
           load: true
-          set: |
-            *.cache-from=type=local,src=/tmp/.buildx-cache
-            *.cache-to=type=local,mode=max,dest=/tmp/.buildx-cache-new
-            
+      # When I do this, it always rebuilds at least
+      #  one of the two images in the compose file.
+      # I don't understand why.
+      # Instead, I have to put cache in the compose file.
       #     set: |
-      #       *.cache-to=type=gha,mode=max
-      #       *.cache-from=type=gha
-
-      # - name: run bake
-      #   run: |
-      #     docker buildx bake --load
-      
+      #       *.cache-from=type=local,src=/tmp/.buildx-cache
+      #       *.cache-to=type=local,mode=max,dest=/tmp/.buildx-cache-new
+            
       - name: run test
         run: |
           docker compose run moo
