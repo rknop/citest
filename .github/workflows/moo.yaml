@@ -29,33 +29,35 @@ jobs:
         with:
           driver: docker-container
 
-      - name: cache docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-citest-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-citest-
+      # - name: cache docker layers
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: /tmp/.buildx-cache
+      #     key: ${{ runner.os }}-buildx-citest-${{ github.sha }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-buildx-citest-
          
       - name: bake
         uses: docker/bake-action@v2.3.0
         with:
           load: true
-      # When I do this, it always rebuilds at least
-      #  one of the two images in the compose file.
-      # I don't understand why.
-      # Instead, I have to put cache in the compose file.
-      #     set: |
-      #       *.cache-from=type=local,src=/tmp/.buildx-cache
-      #       *.cache-to=type=local,mode=max,dest=/tmp/.buildx-cache-new
+          set: |
+            moo.tags=ghcr.io/${{ github.repository_owner }}/moo
+            moo.cache-from=type=gha,scope=cached-moo
+            moo.cache-to=type=gha,scope=cached-moo,mode=max
+            moo-webserver.tags=ghcr.io/${{ github.repository_owner }}/moo-webserver
+            moo-webserver.cache-from=type=gha,scope=cached-moo-webserver
+            moo-webserver.cache-to=type=gha,scope=cached-moo-webserver,mode=max
+            # moo.cache-from=type=local,src=/tmp/.buildx-cache
+            # moo.cache-to=type=local,mode=max,dest=/tmp/.buildx-cache-new
             
       - name: run test
         run: |
           docker compose run moo
 
-      # Do this to avoid the cache continuously growing
-      - name: move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+      # # Do this to avoid the cache continuously growing
+      # - name: move cache
+      #   run: |
+      #     rm -rf /tmp/.buildx-cache
+      #     mv /tmp/.buildx-cache-new /tmp/.buildx-cache
          
