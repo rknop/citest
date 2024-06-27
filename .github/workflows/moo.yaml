@@ -40,22 +40,23 @@ jobs:
       #     restore-keys: |
       #       ${{ runner.os }}-buildx-citest-
          
-      - name: bake
-        uses: docker/bake-action@v5
-        with:
-          load: true
-          pull: true
-          # set: |
-          #   moo.tags=ghcr.io/${{ github.repository_owner }}/moo
-          #   moo.cache-from=type=gha,scope=cached-moo
-          #   moo-webserver.tags=ghcr.io/${{ github.repository_owner }}/moo-webserver
-          #   moo-webserver.cache-from=type=gha,scope=cached-moo-webserver
+      # - name: bake
+      #   uses: docker/bake-action@v5
+      #   with:
+      #     load: true
+      #     pull: true
+      #     # set: |
+      #     #   moo.tags=ghcr.io/${{ github.repository_owner }}/moo
+      #     #   moo.cache-from=type=gha,scope=cached-moo
+      #     #   moo-webserver.tags=ghcr.io/${{ github.repository_owner }}/moo-webserver
+      #     #   moo-webserver.cache-from=type=gha,scope=cached-moo-webserver
 
 # moo.cache-from=type=local,src=/tmp/.buildx-cache
 # moo.cache-to=type=local,mode=max,dest=/tmp/.buildx-cache-new
             
       - name: run test
         run: |
+          docker compose pull
           docker compose run moo
 
       # # Do this to avoid the cache continuously growing
