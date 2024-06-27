@@ -3,6 +3,7 @@ services:
     image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/moo-webserver
     build:
       context: webserver
+      target: webserver
       # x-bake:
       #   cache-from:
       #     - ghcr.io/${GITHUB_REPOSITORY_OWNER}/moo-webserver
@@ -10,7 +11,8 @@ services:
       #   cache-to:
       #     - ghcr.io/${GITHUB_REPOSITORY_OWNER}/moo-webserver
       #     - type=local,dest=/tmp/.buildx-cache-new
-          
+    ports:
+      - 8980:80
 
   moo:
     depends_on:
