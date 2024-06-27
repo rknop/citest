@@ -1,6 +1,6 @@
-FROM rknop/devuan-chimaera-rknop
+FROM rknop/devuan-daedalus-rknop
 
-MAINTAINER Rob Knop <raknop@lbl.gov>
+LABEL maintainer="Rob Knop <raknop@lbl.gov>"
 
 SHELL ["/bin/bash", "-c"]
 
