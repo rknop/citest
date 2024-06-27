@@ -1,0 +1,55 @@
+name: Build and Run
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    env:
+      REGISTRY: gchr.io
+
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+
+      - name: log into github container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: setup docker buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver: docker-container
+
+      # - name: cache docker layers
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: /tmp/.buildx-cache
+      #     key: ${{ runner.os }}-buildx-citest-${{ github.sha }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-buildx-citest-
+         
+      - name: bake
+        uses: docker/bake-action@v5
+        with:
+          load: true
+          set: |
+            moo.tags=ghcr.io/${{ github.repository_owner }}/moo
+            moo.cache-from=type=gha,scope=cached-moo
+            moo.cache-to=type=gha,scope=cached-moo,mode=max
+            moo-webserver.tags=ghcr.io/${{ github.repository_owner }}/moo-webserver
+            moo-webserver.cache-from=type=gha,scope=cached-moo-webserver
+            moo-webserver.cache-to=type=gha,scope=cached-moo-webserver,mode=max
+
+# moo.cache-from=type=local,src=/tmp/.buildx-cache
+# moo.cache-to=type=local,mode=max,dest=/tmp/.buildx-cache-new
+            
+      

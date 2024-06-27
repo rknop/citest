@@ -1,13 +1,16 @@
 name: Moo
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["Build and Run"]
+    branches: [main]
+    types:
+      - completed
   workflow_dispatch:
 
 jobs:
   tests:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     name: moo
     runs-on: ubuntu-latest
     env:
